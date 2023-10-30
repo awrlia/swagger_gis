@@ -5,78 +5,104 @@ info:
     Jelaskan disini apa saja yang perlu dijelaskan
     termasuk informasi yang diperlukan untuk dinilai
     term of service isi dari link repo dari swagger ini
-  termsOfService: https://github.com/jscroot/examples/tree/main/api/swagger
+  termsOfService: https://github.com/Befous/swagger
   contact:
-    email: awangga@gmail.com
+    email: befousmain@gmail.com
   license:
     name: Peda Package
-    url: https://pkg.go.dev/github.com/petapedia/peda
-  version: 1.0.11
+    url: https://pkg.go.dev/github.com/Befous/BackendGIS
+  version: 1.0.3
 externalDocs:
   description: Repo GCF
-  url: https://petapedia.github.io/gcf/
+  url: https://github.com/UniStoreProject3/gcf/
 servers:
-  - url: https://asia-southeast2-awangga.cloudfunctions.net
-tags:
-  - name: data
-    description: Data Geo Spasial
+  - url: 
+  - name: Registrasi
+    description: Membuat akun user dengan password terenkripsi
     externalDocs:
       description: Deskripsi dan Kode Program
-      url: https://petapedia.github.io/gcf/get/
-  - name: auth
-    description: Auth to Access to API
+      url: https://petapedia.github.io/gcf/get/ #yang ini blom diganti ====================================================================
+  - name: Login
+    description: Mendapatkan token menggunakan akun user yang telah dibuat
     externalDocs:
       description: Deskripsi dan Kode Program
-      url: https://petapedia.github.io/gcf/post/
-  - name: user
-    description: Get Token and Authorize
+      url: https://petapedia.github.io/gcf/post/ #yang ini blom diganti ====================================================================
+  - name: Geojson
+    description: Mengambil Geojson
+    externalDocs:
+      description: Deskripsi dan Kode Program
+      url: https://petapedia.github.io/gcf/post/ #yang ini blom diganti ====================================================================
 paths:
-  /petapedia:
+  /AmbilDataGeojson:
     get:
       tags:
-        - data
-      summary: Get Data Geospasial
-      description: List Data Geospasial
-      operationId: getGeoJSON
+        - Geojson
+      summary: Ambil Data Geojson
+      description: Mengambil geojson dari mongodb
+      operationId: AmbilDataGeojson
+      requestBody:
+        content:
+          application/json:
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Peta'
-        '400':
-          description: Invalid status value
-  /petapedia-post:
+                $ref: '#/components/schemas/Geojson'
+      security:
+        - token:
+            - write:apiKey
+            - read:apiKey
+  /MembuatUser:
     post:
       tags:
-        - auth
-      summary: Login get Token
-      description: Login and Get User Token
-      operationId: authService
+        - Registrasi
+      summary: Registrasi User
+      description: Membuat akun user dengan password terenkripsi
+      operationId: MembuatUser
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Auth'
+              $ref: '#/components/schemas/User'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
-        '405':
-          description: Invalid input
+                $ref: '#/components/schemas/User'
+      security:
+        - token:
+            - write:apiKey
+            - read:apiKey
+  /MembuatTokenUser:
+    post:
+      tags:
+        - Login
+      summary: Mendapatkan token untuk login
+      description: Masukkan username dan password yang telah didaftarkan
+      operationId: MembuatTokenUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernameNPassword'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsernameNPassword'
       security:
         - token:
             - write:apiKey
             - read:apiKey
 components:
   schemas:
-    Peta:
+    Geojson:
       type: object
       properties:
         type:
@@ -93,27 +119,27 @@ components:
           properties:
             name:
               type: string
-    Auth:
+    User:
       type: object
       properties:
         username:
           type: string
-          example: petped
+          example: ibrohim
         password:
           type: string
-          example: secret
-    AuthResponse:
+          example: ibrohim
+        role:
+          type: string
+          example: user
+    UsernameNPassword:
       type: object
       properties:
-        status:
-          type: bool
-          example: false
-        message:
+        username:
           type: string
-          example: fehguy
-        token:
+          example: ibrohim
+        password:
           type: string
-          example: fehguy
+          example: ibrohim
   requestBodies:
     AuthReq:
       description: Request Authentication
