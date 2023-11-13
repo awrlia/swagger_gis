@@ -5,12 +5,12 @@ info:
     Jelaskan disini apa saja yang perlu dijelaskan
     termasuk informasi yang diperlukan untuk dinilai
     term of service isi dari link repo dari swagger ini
-  termsOfService: https://github.com/Befous/swagger
+  termsOfService: https://github.com/awrlia/swagger_gis
   contact:
     email: befousmain@gmail.com
   license:
     name: Peda Package
-    url: https://pkg.go.dev/github.com/Befous/BackendGIS
+    url: https://pkg.go.dev/github.com/awrlia/BE_Gis
   version: 1.0.3
 externalDocs:
   description: Repo GCF
