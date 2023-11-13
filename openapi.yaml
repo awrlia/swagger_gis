@@ -22,21 +22,6 @@ servers:
     externalDocs:
       description: Deskripsi dan Kode Program
       url: https://petapedia.github.io/gcf/post/ #yang ini blom diganti ====================================================================
-  - name: Registrasi
-    description: Membuat akun user dengan password terenkripsi
-    externalDocs:
-      description: Deskripsi dan Kode Program
-      url: https://petapedia.github.io/gcf/get/ #yang ini blom diganti ====================================================================
-  - name: Login
-    description: Mendapatkan token menggunakan akun user yang telah dibuat
-    externalDocs:
-      description: Deskripsi dan Kode Program
-      url: https://petapedia.github.io/gcf/post/ #yang ini blom diganti ====================================================================
-  - name: DeleteUser
-    description: Mendapatkan token menggunakan akun user yang telah dibuat
-    externalDocs:
-      description: Deskripsi dan Kode Program
-      url: https://petapedia.github.io/gcf/post/ #yang ini blom diganti ====================================================================
 paths:
   /MembuatGeojsonPointToken/{token}:
     post:
@@ -61,7 +46,7 @@ paths:
         - token:
             - write:apiKey
             - read:apiKey
-  /MembuatGeojsonPolylineHeader/{token}:
+  /MembuatGeojsonPolylineToken/{token}:
     post:
       tags:
         - Geojson
@@ -103,96 +88,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Polygon'
-      security:
-        - token:
-            - write:apiKey
-            - read:apiKey
-  /Befous-AmbilDataGeojsonHeader/{token}:
-    get:
-      tags:
-        - Geojson
-      summary: Ambil Data Geojson
-      description: Mengambil geojson dari mongodb
-      operationId: AmbilDataGeojson
-      requestBody:
-        content:
-          application/json:
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Geojson'
-      security:
-        - token:
-            - write:apiKey
-            - read:apiKey
-  /Befous-RegistrasiUserToken/{token}:
-    post:
-      tags:
-        - Registrasi
-      summary: Registrasi User
-      description: Membuat akun user dengan password terenkripsi
-      operationId: MembuatUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UsernameNPassword'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UsernameNPassword'
-      security:
-        - token:
-            - write:apiKey
-            - read:apiKey
-  /Befous-LoginUserToken/{token}:
-    post:
-      tags:
-        - Login
-      summary: Mendapatkan token untuk login
-      description: Masukkan username dan password yang telah didaftarkan
-      operationId: MembuatTokenUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UsernameNPassword'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UsernameNPassword'
-      security:
-        - token:
-            - write:apiKey
-            - read:apiKey
-  /Befous-HapusUserToken/{token}:
-    delete:
-      tags:
-        - DeleteUser
-      summary: Mendapatkan token untuk login
-      description: Masukkan username dan password yang telah didaftarkan
-      operationId: MembuatTokenUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UsernameOnly'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UsernameOnly'
       security:
         - token:
             - write:apiKey
