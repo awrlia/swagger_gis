@@ -5,29 +5,130 @@ info:
     Jelaskan disini apa saja yang perlu dijelaskan
     termasuk informasi yang diperlukan untuk dinilai
     term of service isi dari link repo dari swagger ini
-  termsOfService:
-    email: 
+  termsOfService: https://github.com/Befous/swagger
+  contact:
+    email: befousmain@gmail.com
   license:
     name: Peda Package
-    url: https://pkg.go.dev/github.com/Indoculturafinders/BackendBaru
+    url: https://pkg.go.dev/github.com/Befous/BackendGIS
   version: 1.0.3
 externalDocs:
   description: Repo GCF
-  url: 
+  url: https://github.com/UniStoreProject3/gcf/
 servers:
   - url: https://asia-southeast2-project3-403605.cloudfunctions.net
+  - name: Geojson
+    description: Menambah dan Memanggil Geojson
+    externalDocs:
+      description: Deskripsi dan Kode Program
+      url: https://petapedia.github.io/gcf/post/ #yang ini blom diganti ====================================================================
+  - name: Registrasi
+    description: Membuat akun user dengan password terenkripsi
+    externalDocs:
+      description: Deskripsi dan Kode Program
+      url: https://petapedia.github.io/gcf/get/ #yang ini blom diganti ====================================================================
   - name: Login
     description: Mendapatkan token menggunakan akun user yang telah dibuat
     externalDocs:
       description: Deskripsi dan Kode Program
       url: https://petapedia.github.io/gcf/post/ #yang ini blom diganti ====================================================================
-  - name: Geojson
-    description: Mengambil Geojson
+  - name: DeleteUser
+    description: Mendapatkan token menggunakan akun user yang telah dibuat
     externalDocs:
       description: Deskripsi dan Kode Program
       url: https://petapedia.github.io/gcf/post/ #yang ini blom diganti ====================================================================
 paths:
-  /CreateUser:
+  /MembuatGeojsonPointToken/{token}:
+    post:
+      tags:
+        - Geojson
+      summary: Menambah Data Point Geojson
+      description: Menambah point geojson ke mongodb
+      operationId: MembuatGeojsonPoint
+      requestBody:
+        content:
+          application/json:
+           schema:
+              $ref: '#/components/schemas/Point'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Point'
+      security:
+        - token:
+            - write:apiKey
+            - read:apiKey
+  /MembuatGeojsonPolylineHeader/{token}:
+    post:
+      tags:
+        - Geojson
+      summary: Menambah Data Polyline Geojson
+      description: Menambah polyline geojson ke mongodb
+      operationId: MembuatGeojsonPolyline
+      requestBody:
+        content:
+          application/json:
+           schema:
+              $ref: '#/components/schemas/Polyline'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Polyline'
+      security:
+        - token:
+            - write:apiKey
+            - read:apiKey
+  /MembuatGeojsonPoligonToken/{token}:
+    post:
+      tags:
+        - Geojson
+      summary: Menambah Data Polygon Geojson
+      description: Menambah polygon geojson ke mongodb
+      operationId: MembuatGeojsonPolygon
+      requestBody:
+        content:
+          application/json:
+           schema:
+              $ref: '#/components/schemas/Polygon'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Polygon'
+      security:
+        - token:
+            - write:apiKey
+            - read:apiKey
+  /Befous-AmbilDataGeojsonHeader/{token}:
+    get:
+      tags:
+        - Geojson
+      summary: Ambil Data Geojson
+      description: Mengambil geojson dari mongodb
+      operationId: AmbilDataGeojson
+      requestBody:
+        content:
+          application/json:
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Geojson'
+      security:
+        - token:
+            - write:apiKey
+            - read:apiKey
+  /Befous-RegistrasiUserToken/{token}:
     post:
       tags:
         - Registrasi
@@ -38,19 +139,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UsernameNPassword'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UsernameNPassword'
       security:
         - token:
             - write:apiKey
             - read:apiKey
-  /GCFPostHandler:
+  /Befous-LoginUserToken/{token}:
     post:
       tags:
         - Login
@@ -69,6 +170,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UsernameNPassword'
+      security:
+        - token:
+            - write:apiKey
+            - read:apiKey
+  /Befous-HapusUserToken/{token}:
+    delete:
+      tags:
+        - DeleteUser
+      summary: Mendapatkan token untuk login
+      description: Masukkan username dan password yang telah didaftarkan
+      operationId: MembuatTokenUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernameOnly'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsernameOnly'
       security:
         - token:
             - write:apiKey
@@ -92,18 +216,69 @@ components:
           properties:
             name:
               type: string
-    User:
+    Point:
       type: object
       properties:
-        username:
+        type:
           type: string
-          example: aulia
-        password:
+          example: Feature
+        properties:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Contoh Point
+        geometry:
+          type: object
+          properties:
+            type: 
+              type: string
+              example: Point
+            coordinates: 
+              type: array
+              example:  [103.62304801308028,-1.6286912230149255]
+    Polyline:
+      type: object
+      properties:
+        type:
           type: string
-          example: aulia
-        role:
+          example: Feature
+        properties:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Contoh Polyline
+        geometry:
+          type: object
+          properties:
+            type: 
+              type: string
+              example: LineString
+            coordinates: 
+              type: array
+              example: [[103.62505530793163,-1.6288798067939751],[103.62395435305416,-1.6290723960335356],[103.62136160431874,-1.6280544241267023]]
+    Polygon:
+      type: object
+      properties:
+        type:
           type: string
-          example: user
+          example: Feature
+        properties:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Contoh Polygon
+        geometry:
+          type: object
+          properties:
+            type: 
+              type: string
+              example: Polygon
+            coordinates: 
+              type: array
+              example: [[[103.62266157176862,-1.6284887975001965],[103.62266157176862,-1.6285986746736683],[103.62284935445302,-1.6285986746736683],[103.62284935445302,-1.6284887975001965],[103.62266157176862,-1.6284887975001965]]]
     UsernameNPassword:
       type: object
       properties:
@@ -111,6 +286,12 @@ components:
           type: string
           example: aulia
         password:
+          type: string
+          example: aulia
+    UsernameOnly:
+      type: object
+      properties:
+        username:
           type: string
           example: aulia
   requestBodies:
