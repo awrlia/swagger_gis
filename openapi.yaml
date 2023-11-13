@@ -17,11 +17,18 @@ externalDocs:
   url: https://github.com/UniStoreProject3/gcf/
 servers:
   - url: https://asia-southeast2-project3-403605.cloudfunctions.net
+tags:
   - name: Geojson
     description: Menambah dan Memanggil Geojson
     externalDocs:
       description: Deskripsi dan Kode Program
       url: https://petapedia.github.io/gcf/post/ #yang ini blom diganti ====================================================================
+  - name: RegistrasiLogin
+    description: Membuat akun user dengan password terenkripsi
+    externalDocs:
+      description: Deskripsi dan Kode Program
+      url: https://petapedia.github.io/gcf/get/ #yang ini blom diganti ====================================================================
+  
 paths:
   /MembuatGeojsonPointToken/{token}:
     post:
@@ -88,6 +95,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Polygon'
+      security:
+        - token:
+            - write:apiKey
+            - read:apiKey
+  /CreateUser:
+      post:
+        tags:
+        - RegistrasiLogin
+        summary: Registrasi User
+        description: Membuat akun user dengan password terenkripsi
+        operationId: MembuatUser
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsernameNPassword'
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/UsernameNPassword'
+        security:
+          - token:
+              - write:apiKey
+              - read:apiKey
+  /GCFPostHandler:
+    post:
+      tags:
+        - RegistrasiLogin
+      summary: Mendapatkan token untuk login
+      description: Masukkan username dan password yang telah didaftarkan
+      operationId: MembuatTokenUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernameNPassword'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsernameNPassword'
       security:
         - token:
             - write:apiKey
